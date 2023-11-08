@@ -40,7 +40,7 @@ const App = () => {
 									key={index}
 									className={step >= index ? 'active' : ''}
 								>
-									{index + 1}
+									{index}
 								</div>
 							);
 						})}
