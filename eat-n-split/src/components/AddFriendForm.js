@@ -36,6 +36,7 @@ function AddFriendForm({ onAddFriend, onFormClose }) {
 				placeholder="Enter name"
 				value={nameValue}
 				onChange={nameChangeHandler}
+				required
 			/>
 			<label htmlFor="add-image">Image url</label>
 			<input

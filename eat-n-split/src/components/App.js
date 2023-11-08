@@ -5,6 +5,7 @@ import Storage from '../Storage';
 
 function App() {
 	const [friends, setFriends] = useState(Storage.getArrayItem('friends'));
+	const [selectedFriend, setSelectedFriend] = useState({});
 
 	const addFriendHandler = (friendObj) => {
 		setFriends((prevState) => {
@@ -14,10 +15,28 @@ function App() {
 		});
 	};
 
+	const selectFriendHandler = (id) => {
+		if (id === selectedFriend.id) {
+			setSelectedFriend({});
+		} else {
+			const friend = friends.find((el) => el.id === id);
+			if (friend) {
+				setSelectedFriend(friend);
+			}
+		}
+	};
+
 	return (
 		<main className="app">
-			<Sidebar friends={friends} onAddFriend={addFriendHandler} />
-			<SplitBillForm />
+			<Sidebar
+				friends={friends}
+				selectedFriend={selectedFriend}
+				onAddFriend={addFriendHandler}
+				onSelectFriend={selectFriendHandler}
+			/>
+			{Object.keys(selectedFriend).length > 0 && (
+				<SplitBillForm friend={selectedFriend} />
+			)}
 		</main>
 	);
 }
