@@ -7,6 +7,10 @@ import Stats from './Stats';
 function App() {
 	const [items, setItems] = useState([]);
 
+	const clearListHandler = () => {
+		setItems([]);
+	};
+
 	const deleteItemHandler = (id) => {
 		setItems((items) => items.filter((item) => item.id !== id));
 	};
@@ -27,6 +31,7 @@ function App() {
 				items={items}
 				onDeleteItem={deleteItemHandler}
 				onToggleItem={toggleItemHandler}
+				onClearList={clearListHandler}
 			/>
 			<Stats items={items} />
 		</main>
