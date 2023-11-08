@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import SplitBillForm from './SplitBillForm';
 import Storage from '../Storage';
@@ -6,6 +6,14 @@ import Storage from '../Storage';
 function App() {
 	const [friends, setFriends] = useState(Storage.getArrayItem('friends'));
 	const [selectedFriend, setSelectedFriend] = useState({});
+
+	// useEffect(() => {
+
+	// })
+
+	useEffect(() => {
+		Storage.setArrayItem('friends', friends);
+	}, [friends]);
 
 	const addFriendHandler = (friendObj) => {
 		setFriends((prevState) => {
@@ -26,6 +34,17 @@ function App() {
 		}
 	};
 
+	const splitBillHandler = (amount) => {
+		console.log(amount);
+		setFriends((prevState) =>
+			prevState.map((el) =>
+				el.id === selectedFriend.id
+					? { ...el, balance: el.balance + amount }
+					: el
+			)
+		);
+	};
+
 	return (
 		<main className="app">
 			<Sidebar
@@ -35,7 +54,10 @@ function App() {
 				onSelectFriend={selectFriendHandler}
 			/>
 			{Object.keys(selectedFriend).length > 0 && (
-				<SplitBillForm friend={selectedFriend} />
+				<SplitBillForm
+					friend={selectedFriend}
+					onSplit={splitBillHandler}
+				/>
 			)}
 		</main>
 	);
