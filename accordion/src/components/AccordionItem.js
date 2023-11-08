@@ -14,8 +14,13 @@ function AccordionItem({ openIndex, onOpen, title, text, id }) {
 			key={id}
 		>
 			<div className="accordion__header" onClick={openHandler}>
-				<span className="accordion__counter">{id + 1}</span>
-				<h3 className="accordion__title">{title}</h3>
+				<div className="accordion__flex">
+					<span className="accordion__counter">
+						{id < 10 ? '0' : ''}
+						{id + 1}
+					</span>
+					<h3 className="accordion__title">{title}</h3>
+				</div>
 				<span className="accordion__icon">
 					{isOpen
 						? String.fromCharCode(10006)

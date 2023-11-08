@@ -8,6 +8,7 @@
 
 :root {
 	font-size: 10px;
+	--primary-color: rgb(7, 134, 9);
 }
 
 body {
@@ -33,9 +34,17 @@ body {
 	margin-block-start: 1rem;
 }
 
+.accordion__flex {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
 .accordion__item {
 	box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
 	padding: 2rem;
+	border-top: 2px solid transparent;
+	border-radius: 1rem;
 }
 
 .accordion__header {
@@ -48,6 +57,19 @@ body {
 .accordion__body {
 	height: 0;
 	overflow: hidden;
+}
+
+.accordion__title {
+	font-size: 1.8rem;
+}
+
+.accordion__item--open {
+	border-color: var(--primary-color);
+}
+
+.accordion__item--open .accordion__title,
+.accordion__item--open .accordion__counter {
+	color: var(--primary-color);
 }
 
 .accordion__item--open .accordion__body {
