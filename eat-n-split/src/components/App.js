@@ -55,6 +55,7 @@ function App() {
 			/>
 			{Object.keys(selectedFriend).length > 0 && (
 				<SplitBillForm
+					key={selectedFriend.id}
 					friend={selectedFriend}
 					onSplit={splitBillHandler}
 				/>
