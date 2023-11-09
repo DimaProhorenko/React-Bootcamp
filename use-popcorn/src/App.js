@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import SearchCounter from './components/SearchCounter';
 import Main from './components/Main';
@@ -7,6 +7,7 @@ import SearchBar from './components/SearchBar';
 import Box from './components/Box';
 import WatchedSummary from './components/WatchedSummary';
 import WatchedList from './components/WatchedList';
+import { API_KEY } from './key';
 
 const tempMovieData = [
 	{
@@ -54,6 +55,25 @@ export default function App() {
 	const [movies, setMovies] = useState(tempMovieData);
 	const [watched, setWatched] = useState(tempWatchedData);
 
+	const searchMovies = async (query) => {
+		const searchString = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`;
+		const results = await fetch(searchString);
+		const data = await results.json();
+		return data;
+	};
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const fetchedMovies = await searchMovies('interstellar');
+			// console.log(fetchedMovies.Results);
+			setMovies(
+				fetchedMovies.Response === 'True' ? fetchedMovies.Search : []
+			);
+		};
+
+		fetchData();
+	}, []);
+
 	return (
 		<>
 			<Navbar>
@@ -68,7 +88,6 @@ export default function App() {
 					<WatchedSummary watched={watched} />
 					<WatchedList watched={watched} />
 				</Box>
-				{/* <WatchedBox data={tempWatchedData} /> */}
 			</Main>
 		</>
 	);
