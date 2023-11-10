@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function SearchBar() {
-	const [query, setQuery] = useState('');
-
+function SearchBar({ query, setQuery }) {
 	const changeHandler = (e) => {
 		setQuery(e.target.value);
 	};
@@ -13,7 +11,7 @@ function SearchBar() {
 			type="text"
 			placeholder="Search movies..."
 			value={query}
-			onChange={(e) => changeHandler}
+			onChange={changeHandler}
 		/>
 	);
 }

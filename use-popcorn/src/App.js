@@ -58,6 +58,7 @@ export default function App() {
 	const [watched, setWatched] = useState(tempWatchedData);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
+	const [query, setQuery] = useState('');
 
 	const searchMovies = async (query) => {
 		try {
@@ -77,20 +78,28 @@ export default function App() {
 	useEffect(() => {
 		const fetchData = async () => {
 			setIsLoading(true);
-			const fetchedMovies = await searchMovies('interljsdljfstellar');
+			setError('');
+			const fetchedMovies = await searchMovies(query);
 			setMovies(
 				fetchedMovies?.Response === 'True' ? fetchedMovies.Search : []
 			);
 			setIsLoading(false);
 		};
 
+		if (query.length < 3) {
+			setMovies([]);
+			setError('');
+			setIsLoading(false);
+			return;
+		}
+
 		fetchData();
-	}, []);
+	}, [query]);
 
 	return (
 		<>
 			<Navbar>
-				<SearchBar />
+				<SearchBar query={query} setQuery={setQuery} />
 				<SearchCounter movies={movies} />
 			</Navbar>
 			<Main>
