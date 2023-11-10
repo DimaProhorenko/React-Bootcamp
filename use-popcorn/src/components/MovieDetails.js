@@ -6,7 +6,7 @@ import Loader from './Loader';
 function SelectedMovie({ selectedId, onClose, onAddWatched }) {
 	const [movie, setMovie] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
-	const [userRating, setUserRating] = useState(null);
+	const [userRating, setUserRating] = useState('');
 
 	const {
 		Title: title,
@@ -68,10 +68,16 @@ function SelectedMovie({ selectedId, onClose, onAddWatched }) {
 			</header>
 			<section>
 				<div className="rating">
-					<StarRating maxRating={10} onSetRating={setUserRating} />
-					<button className="btn-add" onClick={addHandler}>
-						Add to list
-					</button>
+					<StarRating
+						maxRating={10}
+						onSetRating={setUserRating}
+						defaultRating={0}
+					/>
+					{userRating !== '' && (
+						<button className="btn-add" onClick={addHandler}>
+							Add to list
+						</button>
+					)}
 				</div>
 				<p>
 					<em>{plot}</em>

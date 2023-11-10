@@ -10,7 +10,6 @@ export const fetchData = async (subString) => {
 	const res = await fetch(searchString);
 	if (!res.ok) throw new Error('Something went wrong');
 	const data = await res.json();
-	console.log(data);
 
 	if (data.Response !== 'True') throw new Error(data.Error);
 	return data;

@@ -33,8 +33,18 @@ export default function App() {
 	};
 
 	const addWatchedHandler = (movie) => {
-		setWatched((prevState) => [...prevState, movie]);
+		const isMovieInTheList =
+			watched.findIndex((item) => item.imdbID === movie.imdbID) > -1;
+		if (!isMovieInTheList) {
+			setWatched((prevState) => [...prevState, movie]);
+		}
 		closeMovieHandler();
+	};
+
+	const deleteWatchedHandler = (id) => {
+		setWatched((prevState) =>
+			prevState.filter((item) => item.imdbID !== id)
+		);
 	};
 
 	useEffect(() => {
@@ -88,7 +98,10 @@ export default function App() {
 					{selectedMovieId === null ? (
 						<>
 							<WatchedSummary watched={watched} />
-							<WatchedList watched={watched} />
+							<WatchedList
+								watched={watched}
+								onDeleteMovie={deleteWatchedHandler}
+							/>
 						</>
 					) : (
 						<MovieDetails
