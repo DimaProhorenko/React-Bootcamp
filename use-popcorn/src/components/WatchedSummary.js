@@ -15,9 +15,9 @@ function WatchedSummary({ watched }) {
 			<h2>Movies you watched</h2>
 			<div>
 				<WatchedCounter value={watched.length} />
-				<Star value={Math.round(avgImdbRating, 1)} />
-				<UserRating value={Math.round(avgUserRating, 1)} />
-				<MovieRunTime value={Math.round(avgRuntime, 1)} />
+				<Star value={avgImdbRating.toFixed(1)} />
+				<UserRating value={avgUserRating.toFixed(1)} />
+				<MovieRunTime value={avgRuntime.toFixed(1)} />
 			</div>
 		</div>
 	);

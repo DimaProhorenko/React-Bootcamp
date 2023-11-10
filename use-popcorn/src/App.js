@@ -58,7 +58,6 @@ export default function App() {
 						? fetchedMovies.Search
 						: []
 				);
-				setIsLoading(false);
 			} catch (err) {
 				setError(err.message);
 			} finally {
@@ -74,13 +73,18 @@ export default function App() {
 		}
 
 		fetchData();
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query]);
 
 	return (
 		<>
 			<Navbar>
-				<SearchBar query={query} setQuery={setQuery} />
+				<SearchBar
+					query={query}
+					setQuery={setQuery}
+					onClose={closeMovieHandler}
+				/>
 				<SearchCounter movies={movies} />
 			</Navbar>
 			<Main>

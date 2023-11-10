@@ -32,6 +32,27 @@ function SelectedMovie({ selectedId, onClose, onAddWatched }) {
 		getData();
 	}, [selectedId]);
 
+	useEffect(() => {
+		document.title = `Movie | ${movie.Title || ''}`;
+		return () => {
+			document.title = 'usePopcorn';
+		};
+	}, [movie]);
+
+	useEffect(() => {
+		const handler = (e) => {
+			if (e.code === 'Escape') {
+				onClose();
+			}
+		};
+
+		document.addEventListener('keydown', handler);
+
+		return () => {
+			document.removeEventListener('keydown', handler);
+		};
+	}, [onClose]);
+
 	const addHandler = () => {
 		const watchedMovie = {
 			imdbID: selectedId,

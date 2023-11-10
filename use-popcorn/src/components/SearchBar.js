@@ -1,7 +1,8 @@
 import React from 'react';
 
-function SearchBar({ query, setQuery }) {
+function SearchBar({ query, setQuery, onClose }) {
 	const changeHandler = (e) => {
+		onClose();
 		setQuery(e.target.value);
 	};
 
