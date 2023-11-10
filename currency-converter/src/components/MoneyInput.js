@@ -3,13 +3,17 @@ import Input from './Input';
 import SelectButton from './SelectButton';
 import Label from './Label';
 
-function MoneyInput({ labelText, btnText }) {
+function MoneyInput({ labelText, btnType, btnText, onShowCurrencySelect }) {
+	const clickHandler = () => {
+		onShowCurrencySelect(btnType);
+	};
+
 	return (
 		<div>
 			<Label>{labelText}</Label>
 			<div className="money-input">
 				<Input type="text" />
-				<SelectButton>{btnText}</SelectButton>
+				<SelectButton onClick={clickHandler}>{btnText}</SelectButton>
 			</div>
 		</div>
 	);

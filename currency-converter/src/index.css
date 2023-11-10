@@ -116,7 +116,37 @@ h6 {
 	border-bottom-left-radius: 0;
 }
 
-@media screen and (min-width: 800px) {
+.currency-select {
+	width: 90%;
+	height: 80vh;
+	overflow-y: scroll;
+	max-width: 30rem;
+	background-color: var(--secondary-bg-color);
+	color: var(--text-color);
+	position: absolute;
+	top: 10vh;
+	left: 50%;
+	translate: -50% 0;
+
+	padding: 1.5rem;
+	padding-inline-end: 0;
+	border-radius: 1rem;
+	box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.currency-select ul {
+	list-style: none;
+}
+
+.currency-select li {
+	padding: 0.25rem 1rem;
+}
+
+.currency-select li:hover {
+	background-color: #cfcfce;
+}
+
+@media screen and (min-width: 600px) {
 	.inputs {
 		display: flex;
 		gap: 1rem;
