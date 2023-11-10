@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { searchMovieById } from '../fetchHelpers';
 import StarRating from './StarRating';
+import Loader from './Loader';
 
-function SelectedMovie({ selectedId, onClose }) {
+function SelectedMovie({ selectedId, onClose, onAddWatched }) {
 	const [movie, setMovie] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
+	const [userRating, setUserRating] = useState(null);
 
 	const {
 		Title: title,
-		Year: year,
 		Poster: poster,
+		Year: year,
 		Runtime: runtime,
 		imdbRating,
 		Plot: plot,
@@ -20,13 +23,32 @@ function SelectedMovie({ selectedId, onClose }) {
 
 	useEffect(() => {
 		const getData = async () => {
+			setIsLoading(true);
 			const data = await searchMovieById(selectedId);
 			setMovie(data);
+			setIsLoading(false);
 		};
 
 		getData();
 	}, [selectedId]);
-	return (
+
+	const addHandler = () => {
+		const watchedMovie = {
+			imdbID: selectedId,
+			title,
+			year,
+			poster,
+			runtime,
+			imdbRating: +imdbRating,
+			runtime: runtime.split(' ').at(0),
+			userRating,
+		};
+		onAddWatched(watchedMovie);
+	};
+
+	return isLoading ? (
+		<Loader />
+	) : (
 		<div className="details">
 			<header>
 				<button onClick={onClose} className="btn-back">
@@ -46,7 +68,10 @@ function SelectedMovie({ selectedId, onClose }) {
 			</header>
 			<section>
 				<div className="rating">
-					<StarRating maxRating={10} />
+					<StarRating maxRating={10} onSetRating={setUserRating} />
+					<button className="btn-add" onClick={addHandler}>
+						Add to list
+					</button>
 				</div>
 				<p>
 					<em>{plot}</em>
