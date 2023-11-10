@@ -8,6 +8,8 @@ import Box from './components/Box';
 import WatchedSummary from './components/WatchedSummary';
 import WatchedList from './components/WatchedList';
 import { API_KEY } from './key';
+import Loader from './components/Loader';
+import ErrorMsg from './components/ErrorMsg';
 
 const tempMovieData = [
 	{
@@ -52,23 +54,34 @@ const tempWatchedData = [
 ];
 
 export default function App() {
-	const [movies, setMovies] = useState(tempMovieData);
+	const [movies, setMovies] = useState([]);
 	const [watched, setWatched] = useState(tempWatchedData);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState('');
 
 	const searchMovies = async (query) => {
-		const searchString = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`;
-		const results = await fetch(searchString);
-		const data = await results.json();
-		return data;
+		try {
+			const searchString = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`;
+			const res = await fetch(searchString);
+			if (!res.ok) throw new Error('Something went wrong');
+			const data = await res.json();
+			console.log(data);
+
+			if (data.Response !== 'True') throw new Error(data.Error);
+			return data;
+		} catch (err) {
+			setError(err.message);
+		}
 	};
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const fetchedMovies = await searchMovies('interstellar');
-			// console.log(fetchedMovies.Results);
+			setIsLoading(true);
+			const fetchedMovies = await searchMovies('interljsdljfstellar');
 			setMovies(
-				fetchedMovies.Response === 'True' ? fetchedMovies.Search : []
+				fetchedMovies?.Response === 'True' ? fetchedMovies.Search : []
 			);
+			setIsLoading(false);
 		};
 
 		fetchData();
@@ -82,7 +95,10 @@ export default function App() {
 			</Navbar>
 			<Main>
 				<Box>
-					<MovieList movies={movies} />
+					{isLoading && !error && <Loader />}
+					{!isLoading && error && <ErrorMsg msg={error} />}
+					{!isLoading && !error && <MovieList movies={movies} />}
+					{/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
 				</Box>
 				<Box>
 					<WatchedSummary watched={watched} />
