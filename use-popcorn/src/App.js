@@ -7,31 +7,10 @@ import SearchBar from './components/SearchBar';
 import Box from './components/Box';
 import WatchedSummary from './components/WatchedSummary';
 import WatchedList from './components/WatchedList';
-import { API_KEY } from './key';
 import Loader from './components/Loader';
 import ErrorMsg from './components/ErrorMsg';
 import MovieDetails from './components/MovieDetails';
-
-const tempMovieData = [
-	{
-		imdbID: 'tt1375666',
-		Title: 'Inception',
-		Year: '2010',
-		Poster: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-	},
-	{
-		imdbID: 'tt0133093',
-		Title: 'The Matrix',
-		Year: '1999',
-		Poster: 'https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg',
-	},
-	{
-		imdbID: 'tt6751668',
-		Title: 'Parasite',
-		Year: '2019',
-		Poster: 'https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg',
-	},
-];
+import { searchMovies } from './fetchHelpers';
 
 const tempWatchedData = [
 	{
@@ -60,55 +39,37 @@ export default function App() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [query, setQuery] = useState('');
-	const [selectedMovie, setSelectedMovie] = useState(null);
+	const [selectedMovieId, setSelectedMovieId] = useState(null);
 
 	const selectMovieHandler = async (id) => {
-		if (id === selectedMovie?.imdbID) {
-			setSelectedMovie(null);
+		if (id === selectedMovieId) {
+			setSelectedMovieId(null);
 		} else {
-			const movieResult = await searchMovieById(id);
-			setSelectedMovie(movieResult);
+			setSelectedMovieId(id);
 		}
 	};
 
 	const closeMovieHandler = () => {
-		setSelectedMovie(null);
-	};
-
-	const searchMovieById = async (id) => {
-		const result = await fetchData(`&i=${id}`);
-		return result;
-	};
-
-	const fetchData = async (subString) => {
-		try {
-			const searchString = `https://www.omdbapi.com/?apikey=${API_KEY}${subString}`;
-			const res = await fetch(searchString);
-			if (!res.ok) throw new Error('Something went wrong');
-			const data = await res.json();
-			console.log(data);
-
-			if (data.Response !== 'True') throw new Error(data.Error);
-			return data;
-		} catch (err) {
-			setError(err.message);
-		}
-	};
-
-	const searchMovies = async (query) => {
-		const result = await fetchData(`&s=${query}`);
-		return result;
+		setSelectedMovieId(null);
 	};
 
 	useEffect(() => {
 		const fetchData = async () => {
-			setIsLoading(true);
-			setError('');
-			const fetchedMovies = await searchMovies(query);
-			setMovies(
-				fetchedMovies?.Response === 'True' ? fetchedMovies.Search : []
-			);
-			setIsLoading(false);
+			try {
+				setIsLoading(true);
+				setError('');
+				const fetchedMovies = await searchMovies(query);
+				setMovies(
+					fetchedMovies?.Response === 'True'
+						? fetchedMovies.Search
+						: []
+				);
+				setIsLoading(false);
+			} catch (err) {
+				setError(err.message);
+			} finally {
+				setIsLoading(false);
+			}
 		};
 
 		if (query.length < 3) {
@@ -138,17 +99,16 @@ export default function App() {
 							movies={movies}
 						/>
 					)}
-					{/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
 				</Box>
 				<Box>
-					{selectedMovie === null ? (
+					{selectedMovieId === null ? (
 						<>
 							<WatchedSummary watched={watched} />
 							<WatchedList watched={watched} />
 						</>
 					) : (
 						<MovieDetails
-							movie={selectedMovie}
+							selectedId={selectedMovieId}
 							onClose={closeMovieHandler}
 						/>
 					)}
