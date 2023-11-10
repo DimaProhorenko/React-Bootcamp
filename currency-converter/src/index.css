@@ -1,0 +1,128 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	font-size: 10px;
+	--main-bg-color: rgba(34, 61, 13, 0.9);
+	--secondary-bg-color: #fff;
+	--primary-color: #9fe870;
+	--text-color: #000;
+	--secondary-text-color: #fff;
+}
+
+body {
+	background-color: var(--main-bg-color);
+	color: var(--secondary-text-color);
+
+	line-height: 1.6;
+	font-size: 1.6rem;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+		'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+		'Helvetica Neue', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	line-height: 1;
+}
+
+/* Utils */
+
+.container {
+	width: 90%;
+	max-width: 600px;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-inline: auto;
+}
+
+.main {
+	width: 100%;
+}
+
+.title {
+	font-size: clamp(2.5rem, 1.0222rem + 6.2222vw, 6rem);
+	color: var(--primary-color);
+	text-align: center;
+}
+
+.card {
+	width: 100%;
+	padding: 2rem;
+	background-color: var(--secondary-bg-color);
+	color: var(--text-color);
+	border-radius: 2rem;
+}
+
+.input,
+.select-btn {
+	display: inline-block;
+	padding-block: 1rem;
+	padding-inline: 1rem;
+	outline: none;
+	border: none;
+	background-color: transparent;
+	border-radius: inherit;
+}
+
+.input {
+	width: 100%;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	font-size: 1.8rem;
+}
+
+.label {
+	font-size: clamp(1.2rem, 1.1156rem + 0.3556vw, 1.4rem);
+	display: block;
+	margin-block-end: 0.25rem;
+}
+
+.header {
+	margin-block-end: 4rem;
+}
+
+.money-input {
+	border-radius: 1rem;
+	box-shadow: inset 0 0 0 1px #c9cbce;
+	overflow: hidden;
+	display: flex;
+	transition: box-shadow 250ms ease;
+}
+
+.input:focus,
+.select-btn:focus {
+	box-shadow: inset 0 0 0 2px #6c6c6b;
+}
+
+.select-btn {
+	text-transform: uppercase;
+	font-weight: 600;
+	font-size: 1.2rem;
+	transition: box-shadow 250ms ease;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+@media screen and (min-width: 800px) {
+	.inputs {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.inputs * {
+		flex-grow: 1;
+	}
+}
