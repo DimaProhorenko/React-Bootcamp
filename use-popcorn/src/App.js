@@ -10,6 +10,7 @@ import WatchedList from './components/WatchedList';
 import { API_KEY } from './key';
 import Loader from './components/Loader';
 import ErrorMsg from './components/ErrorMsg';
+import MovieDetails from './components/MovieDetails';
 
 const tempMovieData = [
 	{
@@ -59,10 +60,29 @@ export default function App() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [query, setQuery] = useState('');
+	const [selectedMovie, setSelectedMovie] = useState(null);
 
-	const searchMovies = async (query) => {
+	const selectMovieHandler = async (id) => {
+		if (id === selectedMovie?.imdbID) {
+			setSelectedMovie(null);
+		} else {
+			const movieResult = await searchMovieById(id);
+			setSelectedMovie(movieResult);
+		}
+	};
+
+	const closeMovieHandler = () => {
+		setSelectedMovie(null);
+	};
+
+	const searchMovieById = async (id) => {
+		const result = await fetchData(`&i=${id}`);
+		return result;
+	};
+
+	const fetchData = async (subString) => {
 		try {
-			const searchString = `https://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`;
+			const searchString = `https://www.omdbapi.com/?apikey=${API_KEY}${subString}`;
 			const res = await fetch(searchString);
 			if (!res.ok) throw new Error('Something went wrong');
 			const data = await res.json();
@@ -73,6 +93,11 @@ export default function App() {
 		} catch (err) {
 			setError(err.message);
 		}
+	};
+
+	const searchMovies = async (query) => {
+		const result = await fetchData(`&s=${query}`);
+		return result;
 	};
 
 	useEffect(() => {
@@ -94,6 +119,7 @@ export default function App() {
 		}
 
 		fetchData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query]);
 
 	return (
@@ -106,12 +132,26 @@ export default function App() {
 				<Box>
 					{isLoading && !error && <Loader />}
 					{!isLoading && error && <ErrorMsg msg={error} />}
-					{!isLoading && !error && <MovieList movies={movies} />}
+					{!isLoading && !error && (
+						<MovieList
+							onSelectMovie={selectMovieHandler}
+							movies={movies}
+						/>
+					)}
 					{/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
 				</Box>
 				<Box>
-					<WatchedSummary watched={watched} />
-					<WatchedList watched={watched} />
+					{selectedMovie === null ? (
+						<>
+							<WatchedSummary watched={watched} />
+							<WatchedList watched={watched} />
+						</>
+					) : (
+						<MovieDetails
+							movie={selectedMovie}
+							onClose={closeMovieHandler}
+						/>
+					)}
 				</Box>
 			</Main>
 		</>

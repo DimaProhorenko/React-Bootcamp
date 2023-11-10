@@ -1,8 +1,12 @@
 import React from 'react';
 
-function Movie({ movie, ...restProps }) {
+function Movie({ movie, onSelectMovie, ...restProps }) {
+	const selectHandler = () => {
+		onSelectMovie(movie.imdbID);
+	};
+
 	return (
-		<li>
+		<li onClick={selectHandler}>
 			<img src={movie.Poster} alt={`${movie.Title} poster`} />
 			<h3>{movie.Title}</h3>
 			<div>
