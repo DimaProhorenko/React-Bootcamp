@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useKey } from '../useKey';
 
 function SearchBar({ query, setQuery, onClose }) {
 	const inputEl = useRef(null);
@@ -8,23 +9,16 @@ function SearchBar({ query, setQuery, onClose }) {
 		setQuery(e.target.value);
 	};
 
-	useEffect(() => {
-		const onFocusHandler = (e) => {
-			if (document.activeElement === inputEl.current) return;
-
-			if (e.code === 'Enter') {
-				inputEl.current.focus();
-				setQuery('');
-			}
-		};
-
+	useKey('Enter', () => {
+		if (document.activeElement === inputEl.current) return;
 		inputEl.current.focus();
-		document.addEventListener('keydown', onFocusHandler);
+		setQuery('');
+		onClose();
+	});
 
-		return () => {
-			document.removeEventListener('keydown', onFocusHandler);
-		};
-	}, [setQuery]);
+	useEffect(() => {
+		inputEl.current.focus();
+	}, []);
 
 	return (
 		<input
