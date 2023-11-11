@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Navbar from './components/Navbar';
 import SearchCounter from './components/SearchCounter';
 import Main from './components/Main';
@@ -10,14 +10,15 @@ import WatchedList from './components/WatchedList';
 import Loader from './components/Loader';
 import ErrorMsg from './components/ErrorMsg';
 import MovieDetails from './components/MovieDetails';
-import { searchMovies } from './fetchHelpers';
+import { useMovies } from './useMovies';
+import { useLocalStorageState } from './useLocalStorageState';
 
 export default function App() {
-	const [movies, setMovies] = useState([]);
-	const [watched, setWatched] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState('');
 	const [query, setQuery] = useState('');
+
+	const { movies, isLoading, error } = useMovies(query);
+	const [watched, setWatched] = useLocalStorageState([], 'watched');
+
 	const [selectedMovieId, setSelectedMovieId] = useState(null);
 
 	const selectMovieHandler = async (id) => {
@@ -46,36 +47,6 @@ export default function App() {
 			prevState.filter((item) => item.imdbID !== id)
 		);
 	};
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setIsLoading(true);
-				setError('');
-				const fetchedMovies = await searchMovies(query);
-				setMovies(
-					fetchedMovies?.Response === 'True'
-						? fetchedMovies.Search
-						: []
-				);
-			} catch (err) {
-				setError(err.message);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		if (query.length < 3) {
-			setMovies([]);
-			setError('');
-			setIsLoading(false);
-			return;
-		}
-
-		fetchData();
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [query]);
 
 	return (
 		<>

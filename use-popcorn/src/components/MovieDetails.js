@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { searchMovieById } from '../fetchHelpers';
 import StarRating from './StarRating';
 import Loader from './Loader';
+import { useKey } from '../useKey';
 
 function SelectedMovie({ selectedId, onClose, onAddWatched }) {
 	const [movie, setMovie] = useState({});
@@ -21,6 +22,8 @@ function SelectedMovie({ selectedId, onClose, onAddWatched }) {
 		Genre: genre,
 	} = movie;
 
+	useKey('Escape', onClose);
+
 	useEffect(() => {
 		const getData = async () => {
 			setIsLoading(true);
@@ -39,19 +42,19 @@ function SelectedMovie({ selectedId, onClose, onAddWatched }) {
 		};
 	}, [movie]);
 
-	useEffect(() => {
-		const handler = (e) => {
-			if (e.code === 'Escape') {
-				onClose();
-			}
-		};
+	// useEffect(() => {
+	// 	const handler = (e) => {
+	// 		if (e.code === 'Escape') {
+	// 			onClose();
+	// 		}
+	// 	};
 
-		document.addEventListener('keydown', handler);
+	// 	document.addEventListener('keydown', handler);
 
-		return () => {
-			document.removeEventListener('keydown', handler);
-		};
-	}, [onClose]);
+	// 	return () => {
+	// 		document.removeEventListener('keydown', handler);
+	// 	};
+	// }, [onClose]);
 
 	const addHandler = () => {
 		const watchedMovie = {
