@@ -4,26 +4,20 @@ import Main from './components/Main';
 import MoneyInput from './components/MoneyInput';
 import Card from './components/Card';
 import Container from './components/Container';
-import CurrencySelect from './components/CurrencySelect';
 import Fetcher from './Fetcher';
 
 function App() {
 	const [currencies, setCurrencies] = useState({});
-	const [showCurrencySelect, setShowCurrencySelect] = useState(false);
-	const [firstCurrency, setFirstCurrency] = useState('USD');
-	const [secondCurrency, setSecondCurrency] = useState('EURO');
-
-	const openCurrensySelectHandler = (btnType) => {
-		setShowCurrencySelect(true);
-	};
-
-	const closeCurrensySelectHandler = () => {
-		setShowCurrencySelect(false);
-	};
-
-	const selectCurrencyHandler = () => {
-		closeCurrensySelectHandler();
-	};
+	const [usedCurrencies, setUsedCurrencies] = useState({
+		first: {
+			name: 'USD',
+			fullName: 'United States Dollar',
+		},
+		second: {
+			name: 'EUR',
+			fullName: 'EURO',
+		},
+	});
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -35,32 +29,42 @@ function App() {
 		fetchData();
 	}, []);
 
+	const onSelectCurrencyHandler = (btnId, value, description) => {
+		const newCurrency = {};
+		newCurrency[btnId] = {
+			name: value,
+			fullName: description,
+		};
+
+		setUsedCurrencies((prevState) => {
+			return { ...prevState, ...newCurrency };
+		});
+	};
+
 	return (
 		<Container>
 			<Header />
 			<Main>
 				<Card className="inputs">
 					<MoneyInput
-						btnType="first"
-						btnText={firstCurrency}
+						btnId="first"
+						btnTitle={usedCurrencies.first.fullName}
+						btnText={usedCurrencies.first}
 						labelText="Value"
 						currencies={currencies}
-						onShowCurrencySelect={openCurrensySelectHandler}
+						onSelect={onSelectCurrencyHandler}
+						defaultValue={usedCurrencies.first.name}
 					/>
 					<MoneyInput
-						btnType="second"
-						btnText={secondCurrency}
+						btnId="second"
+						btnTitle={usedCurrencies.second.fullName}
+						btnText={usedCurrencies.second}
 						labelText="Converted to"
 						currencies={currencies}
-						onShowCurrencySelect={openCurrensySelectHandler}
+						onSelect={onSelectCurrencyHandler}
+						defaultValue={usedCurrencies.second.name}
 					/>
 				</Card>
-				{showCurrencySelect && (
-					<CurrencySelect
-						currencies={currencies}
-						onSelectCurrency={selectCurrencyHandler}
-					/>
-				)}
 			</Main>
 		</Container>
 	);
