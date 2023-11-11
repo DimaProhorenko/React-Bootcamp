@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-function Input({ className, ...restProps }) {
-	const [value, setValue] = useState('');
+function Input({ className, defaultValue, onChangeHandler, ...restProps }) {
+	const [value, setValue] = useState(defaultValue);
+
+	useEffect(() => {
+		setValue(Math.round(defaultValue));
+	}, [value, defaultValue]);
 
 	const changeHandler = (e) => {
-		setValue(e.target.value);
+		onChangeHandler(+e.target.value);
+		setValue(+e.target.value);
 	};
 
 	return (

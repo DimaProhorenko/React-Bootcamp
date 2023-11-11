@@ -10,13 +10,19 @@ function MoneyInput({
 	btnText,
 	currencies,
 	onSelect,
+	defaultInputValue,
+	onSetAmount,
 	defaultValue,
 }) {
 	return (
 		<div>
 			<Label>{labelText}</Label>
 			<div className="money-input">
-				<Input type="text" />
+				<Input
+					type="text"
+					defaultValue={defaultInputValue}
+					onChangeHandler={onSetAmount}
+				/>
 				<SelectButton
 					title={btnTitle}
 					btnId={btnId}

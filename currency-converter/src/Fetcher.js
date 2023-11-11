@@ -6,6 +6,11 @@ export default class Fetcher {
 		return data;
 	}
 
+	static async getRates(currency) {
+		const data = await Fetcher._getData(`latest?from=${currency}`);
+		return data;
+	}
+
 	static async _getData(endpoint) {
 		const res = await fetch(`${Fetcher._URL}${endpoint}`);
 		if (res.ok) {

@@ -8,6 +8,9 @@ import Fetcher from './Fetcher';
 
 function App() {
 	const [currencies, setCurrencies] = useState({});
+	const [amount, setAmount] = useState(1000);
+	const [convertedValue, setConvertedValue] = useState(0);
+	const [rates, setRates] = useState(null);
 	const [usedCurrencies, setUsedCurrencies] = useState({
 		first: {
 			name: 'USD',
@@ -20,16 +23,29 @@ function App() {
 	});
 
 	useEffect(() => {
+		setConvertedValue(
+			rates && amount * rates[usedCurrencies?.second?.name]
+		);
+	}, [amount, rates, usedCurrencies?.second?.name]);
+
+	useEffect(() => {
 		const fetchData = async () => {
 			const data = await Fetcher.getCurrencies();
 			setCurrencies(data);
-			console.log(data);
 		};
 
 		fetchData();
 	}, []);
 
-	const onSelectCurrencyHandler = (btnId, value, description) => {
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await Fetcher.getRates(usedCurrencies.first.name);
+			setRates(data.rates);
+		};
+		fetchData();
+	}, [usedCurrencies.first]);
+
+	const onSelectCurrencyHandler = async (btnId, value, description) => {
 		const newCurrency = {};
 		newCurrency[btnId] = {
 			name: value,
@@ -39,6 +55,11 @@ function App() {
 		setUsedCurrencies((prevState) => {
 			return { ...prevState, ...newCurrency };
 		});
+		if (btnId === 'first') {
+			const fetchedRates = await Fetcher.getRates(value);
+			setRates({ ...fetchedRates.rates });
+			console.log(fetchedRates.rates);
+		}
 	};
 
 	return (
@@ -53,6 +74,8 @@ function App() {
 						labelText="Value"
 						currencies={currencies}
 						onSelect={onSelectCurrencyHandler}
+						defaultInputValue={amount}
+						onSetAmount={setAmount}
 						defaultValue={usedCurrencies.first.name}
 					/>
 					<MoneyInput
@@ -63,6 +86,7 @@ function App() {
 						currencies={currencies}
 						onSelect={onSelectCurrencyHandler}
 						defaultValue={usedCurrencies.second.name}
+						defaultInputValue={convertedValue}
 					/>
 				</Card>
 			</Main>
