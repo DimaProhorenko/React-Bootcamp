@@ -1,5 +1,12 @@
 import React, { useReducer, useEffect } from 'react';
-import { Main, Header, Loader, Error, StartScreen } from './components';
+import {
+	Main,
+	Header,
+	Loader,
+	Error,
+	StartScreen,
+	Question,
+} from './components';
 
 const reducer = (state, action) => {
 	switch (action.type) {
@@ -7,6 +14,23 @@ const reducer = (state, action) => {
 			return { ...state, questions: action.payload, status: 'ready' };
 		case 'dataFailed':
 			return { ...state, questions: [], status: 'error' };
+		case 'startNewQuiz':
+			return { ...state, status: 'active' };
+		case 'newAnswer':
+			const { isCorrect, points } = action.payload;
+
+			const score = isCorrect ? state.score + points : state.score;
+			return {
+				...state,
+				answer: { ...action.payload },
+				score,
+			};
+		case 'nextQuestion':
+			return {
+				...state,
+				currentQuestionIndex: state.currentQuestionIndex + 1,
+				answer: null,
+			};
 		default:
 			throw new Error('Unknown action');
 	}
@@ -17,10 +41,14 @@ const initialState = {
 
 	// loading, error, ready, active, finished
 	status: 'loading',
+	currentQuestionIndex: 0,
+	answer: null,
+	score: 0,
 };
 
 function App() {
-	const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+	const [{ questions, status, currentQuestionIndex, answer }, dispatch] =
+		useReducer(reducer, initialState);
 
 	const numOfQuestions = questions.length;
 
@@ -50,7 +78,17 @@ function App() {
 				{status === 'loading' && <Loader />}
 				{status === 'error' && <Error />}
 				{status === 'ready' && (
-					<StartScreen questionNum={numOfQuestions} />
+					<StartScreen
+						questionNum={numOfQuestions}
+						dispatch={dispatch}
+					/>
+				)}
+				{status === 'active' && (
+					<Question
+						question={questions.at(currentQuestionIndex)}
+						answer={answer}
+						dispatch={dispatch}
+					/>
 				)}
 			</Main>
 		</>
