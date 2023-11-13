@@ -1,11 +1,11 @@
 import React from 'react';
-import DateCounter from './components/DateCounter';
+import { Main, Header } from './components';
 
 function App() {
 	return (
-		<div>
-			<DateCounter />
-		</div>
+		<Main>
+			<Header />
+		</Main>
 	);
 }
 
