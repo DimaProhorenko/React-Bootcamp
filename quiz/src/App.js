@@ -6,6 +6,8 @@ import {
 	Error,
 	StartScreen,
 	Question,
+	Progress,
+	FinishScreen,
 } from './components';
 
 const reducer = (state, action) => {
@@ -31,6 +33,22 @@ const reducer = (state, action) => {
 				currentQuestionIndex: state.currentQuestionIndex + 1,
 				answer: null,
 			};
+		case 'finish':
+			return {
+				...state,
+				status: 'finished',
+				highscore:
+					state.score > state.highscore
+						? state.score
+						: state.highscore,
+			};
+		case 'restart':
+			return {
+				...initialState,
+				status: 'ready',
+				questions: state.questions,
+				highscore: state.highscore,
+			};
 		default:
 			throw new Error('Unknown action');
 	}
@@ -44,13 +62,21 @@ const initialState = {
 	currentQuestionIndex: 0,
 	answer: null,
 	score: 0,
+	highscore: null,
 };
 
 function App() {
-	const [{ questions, status, currentQuestionIndex, answer }, dispatch] =
-		useReducer(reducer, initialState);
+	const [
+		{ questions, status, currentQuestionIndex, answer, score, highscore },
+		dispatch,
+	] = useReducer(reducer, initialState);
+	console.log(answer);
 
 	const numOfQuestions = questions.length;
+	const totalPoints = questions.reduce(
+		(points, nextEl) => points + nextEl.points,
+		0
+	);
 
 	useEffect(() => {
 		const getData = async () => {
@@ -84,9 +110,28 @@ function App() {
 					/>
 				)}
 				{status === 'active' && (
-					<Question
-						question={questions.at(currentQuestionIndex)}
-						answer={answer}
+					<>
+						<Progress
+							questionIndex={currentQuestionIndex}
+							numOfQuestions={numOfQuestions}
+							score={score}
+							totalPoints={totalPoints}
+							answer={answer}
+						/>
+						<Question
+							question={questions.at(currentQuestionIndex)}
+							questionIndex={currentQuestionIndex}
+							numOfQuestions={numOfQuestions}
+							answer={answer}
+							dispatch={dispatch}
+						/>
+					</>
+				)}
+				{status === 'finished' && (
+					<FinishScreen
+						score={score}
+						totalPoints={totalPoints}
+						highscore={highscore}
 						dispatch={dispatch}
 					/>
 				)}

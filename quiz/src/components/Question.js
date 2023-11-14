@@ -1,7 +1,14 @@
 import React from 'react';
 import { Option, Button } from './';
 
-function Question({ question, answer, dispatch }) {
+function Question({
+	question,
+	answer,
+	numOfQuestions,
+	questionIndex,
+	dispatch,
+}) {
+	console.log(question, questionIndex, numOfQuestions);
 	const { question: q, options, correctOption, points } = question;
 
 	const answerHandler = (id) => {
@@ -13,6 +20,12 @@ function Question({ question, answer, dispatch }) {
 				isCorrect: id === correctOption,
 				points,
 			},
+		});
+	};
+
+	const finishHandler = () => {
+		dispatch({
+			type: 'finish',
 		});
 	};
 
@@ -44,7 +57,14 @@ function Question({ question, answer, dispatch }) {
 				))}
 			</div>
 			{answer !== null && (
-				<Button className="btn-ui" onClick={nextQuestionHandler}>
+				<Button
+					className="btn-ui"
+					onClick={
+						questionIndex === numOfQuestions - 1
+							? finishHandler
+							: nextQuestionHandler
+					}
+				>
 					Next
 				</Button>
 			)}
