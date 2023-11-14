@@ -8,6 +8,9 @@ import {
 	Question,
 	Progress,
 	FinishScreen,
+	Footer,
+	Timer,
+	Button,
 } from './components';
 
 const reducer = (state, action) => {
@@ -17,7 +20,11 @@ const reducer = (state, action) => {
 		case 'dataFailed':
 			return { ...state, questions: [], status: 'error' };
 		case 'startNewQuiz':
-			return { ...state, status: 'active' };
+			return {
+				...state,
+				status: 'active',
+				secondsRemaining: SECONDS_PER_QUESTION * state.questions.length,
+			};
 		case 'newAnswer':
 			const { isCorrect, points } = action.payload;
 
@@ -49,10 +56,19 @@ const reducer = (state, action) => {
 				questions: state.questions,
 				highscore: state.highscore,
 			};
+		case 'tick':
+			return {
+				...state,
+				secondsRemaining: state.secondsRemaining - action.payload,
+				status:
+					state.secondsRemaining === 0 ? 'finished' : state.status,
+			};
 		default:
 			throw new Error('Unknown action');
 	}
 };
+
+const SECONDS_PER_QUESTION = 15;
 
 const initialState = {
 	questions: [],
@@ -63,20 +79,40 @@ const initialState = {
 	answer: null,
 	score: 0,
 	highscore: null,
+	secondsRemaining: null,
 };
 
 function App() {
 	const [
-		{ questions, status, currentQuestionIndex, answer, score, highscore },
+		{
+			questions,
+			status,
+			currentQuestionIndex,
+			answer,
+			score,
+			highscore,
+			secondsRemaining,
+		},
 		dispatch,
 	] = useReducer(reducer, initialState);
-	console.log(answer);
 
 	const numOfQuestions = questions.length;
 	const totalPoints = questions.reduce(
 		(points, nextEl) => points + nextEl.points,
 		0
 	);
+
+	const finishHandler = () => {
+		dispatch({
+			type: 'finish',
+		});
+	};
+
+	const nextQuestionHandler = () => {
+		dispatch({
+			type: 'nextQuestion',
+		});
+	};
 
 	useEffect(() => {
 		const getData = async () => {
@@ -125,6 +161,25 @@ function App() {
 							answer={answer}
 							dispatch={dispatch}
 						/>
+						<Footer>
+							<Timer
+								dispatch={dispatch}
+								secondsRemaining={secondsRemaining}
+							/>
+							{answer !== null && (
+								<Button
+									className="btn-ui"
+									onClick={
+										currentQuestionIndex ===
+										numOfQuestions - 1
+											? finishHandler
+											: nextQuestionHandler
+									}
+								>
+									Next
+								</Button>
+							)}
+						</Footer>
 					</>
 				)}
 				{status === 'finished' && (

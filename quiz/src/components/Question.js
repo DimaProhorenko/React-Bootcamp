@@ -1,5 +1,5 @@
 import React from 'react';
-import { Option, Button } from './';
+import { Option } from './';
 
 function Question({
 	question,
@@ -8,7 +8,6 @@ function Question({
 	questionIndex,
 	dispatch,
 }) {
-	console.log(question, questionIndex, numOfQuestions);
 	const { question: q, options, correctOption, points } = question;
 
 	const answerHandler = (id) => {
@@ -20,18 +19,6 @@ function Question({
 				isCorrect: id === correctOption,
 				points,
 			},
-		});
-	};
-
-	const finishHandler = () => {
-		dispatch({
-			type: 'finish',
-		});
-	};
-
-	const nextQuestionHandler = () => {
-		dispatch({
-			type: 'nextQuestion',
 		});
 	};
 
@@ -56,18 +43,6 @@ function Question({
 					/>
 				))}
 			</div>
-			{answer !== null && (
-				<Button
-					className="btn-ui"
-					onClick={
-						questionIndex === numOfQuestions - 1
-							? finishHandler
-							: nextQuestionHandler
-					}
-				>
-					Next
-				</Button>
-			)}
 		</div>
 	);
 }

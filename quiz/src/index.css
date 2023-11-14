@@ -207,8 +207,14 @@ progress {
 	font-size: 1.4rem;
 }
 
+.footer {
+	width: 100%;
+	max-width: 500px;
+	display: flex;
+	justify-content: space-between;
+}
+
 .timer {
-	float: left;
 	font-size: 1.8rem;
 	color: var(--color-medium);
 	border: 2px solid var(--color-dark);
