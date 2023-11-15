@@ -8,14 +8,13 @@ import {
 	Login,
 	AppLayout,
 } from './pages';
-import { CityList } from './components';
+import { CityList, CountryList, City } from './components';
 
 const BASE_URL = 'http://localhost:8000';
 
 function App() {
 	const [cities, setCities] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
-	console.log(cities);
 
 	useEffect(() => {
 		const fetchCities = async () => {
@@ -47,9 +46,15 @@ function App() {
 							<CityList cities={cities} isLoading={isLoading} />
 						}
 					/>
+					<Route path="cities/:id" element={<City />} />
 					<Route
 						path="countries"
-						element={<p>List of countries</p>}
+						element={
+							<CountryList
+								cities={cities}
+								isLoading={isLoading}
+							/>
+						}
 					/>
 					<Route path="form" element={<p>Form</p>} />
 					<Route

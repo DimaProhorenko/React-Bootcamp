@@ -1,4 +1,4 @@
-import { Spinner, CityItem } from '../';
+import { Spinner, CityItem, Message } from '../';
 import styles from './CityList.module.css';
 import PropTypes from 'prop-types';
 
@@ -7,13 +7,15 @@ CityList.propTypes = {
 	isLoading: PropTypes.bool,
 };
 
-function CityList(props) {
-	const { cities, isLoading } = props;
+function CityList({ cities, isLoading }) {
+	if (isLoading) return <Spinner />;
+	if (!cities.length)
+		return <Message msg="Add your first city by clicking on the map" />;
 	return (
 		<ul className={styles.cityList}>
-			{isLoading && <Spinner />}
-			{!isLoading &&
-				cities.map((city) => <CityItem key={city.id} city={city} />)}
+			{cities.map((city) => (
+				<CityItem key={city.id} city={city} />
+			))}
 		</ul>
 	);
 }
