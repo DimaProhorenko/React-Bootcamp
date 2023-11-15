@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import {
 	Homepage,
 	Pricing,
@@ -8,7 +8,7 @@ import {
 	Login,
 	AppLayout,
 } from './pages';
-import { CityList, CountryList, City } from './components';
+import { CityList, CountryList, City, Form } from './components';
 
 const BASE_URL = 'http://localhost:8000';
 
@@ -56,13 +56,8 @@ function App() {
 							/>
 						}
 					/>
-					<Route path="form" element={<p>Form</p>} />
-					<Route
-						index
-						element={
-							<CityList cities={cities} isLoading={isLoading} />
-						}
-					/>
+					<Route path="form" element={<Form />} />
+					<Route index element={<Navigate replace to="cities" />} />
 				</Route>
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>
