@@ -11,6 +11,7 @@ CitiesProvider.propTypes = {
 
 export function CitiesProvider({ children }) {
 	const [cities, setCities] = useState([]);
+	const [currentCity, setCurrentCity] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
@@ -28,8 +29,24 @@ export function CitiesProvider({ children }) {
 		};
 		fetchCities();
 	}, []);
+
+	const getCurrentCity = async (id) => {
+		try {
+			setIsLoading(true);
+			const res = await fetch(`http://localhost:8000/cities/${id}`);
+			const data = await res.json();
+			setCurrentCity(data);
+		} catch (err) {
+			alert(err.message);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	return (
-		<CitiesContext.Provider value={{ cities, isLoading }}>
+		<CitiesContext.Provider
+			value={{ cities, currentCity, getCurrentCity, isLoading }}
+		>
 			{children}
 		</CitiesContext.Provider>
 	);
