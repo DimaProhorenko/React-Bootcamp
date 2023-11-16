@@ -1,13 +1,9 @@
 import { Spinner, CountryItem, Message } from '../';
 import styles from './CountryList.module.css';
-import PropTypes from 'prop-types';
+import { useCities } from '../../contexts/CitiesContext';
 
-CountryList.propTypes = {
-	cities: PropTypes.array,
-	isLoading: PropTypes.bool,
-};
-
-function CountryList({ cities, isLoading }) {
+function CountryList() {
+	const { cities, isLoading } = useCities();
 	const countries = cities.reduce((arr, city) => {
 		if (!arr.map((el) => el.country).includes(city.country)) {
 			return [

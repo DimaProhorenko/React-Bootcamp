@@ -1,13 +1,9 @@
 import { Spinner, CityItem, Message } from '../';
 import styles from './CityList.module.css';
-import PropTypes from 'prop-types';
+import { useCities } from '../../contexts/CitiesContext';
 
-CityList.propTypes = {
-	cities: PropTypes.array,
-	isLoading: PropTypes.bool,
-};
-
-function CityList({ cities, isLoading }) {
+function CityList() {
+	const { cities, isLoading } = useCities();
 	if (isLoading) return <Spinner />;
 	if (!cities.length)
 		return <Message msg="Add your first city by clicking on the map" />;
