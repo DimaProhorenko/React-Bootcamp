@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import { Button } from '../';
-
 import styles from './Form.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useUrlPosition } from '../../hooks/useUrlPosition';
+import { Button } from '../';
 
 export function convertToEmoji(countryCode) {
 	const codePoints = countryCode
@@ -17,6 +17,8 @@ export function convertToEmoji(countryCode) {
 
 function Form() {
 	const navigate = useNavigate();
+
+	const [lat, lng] = useUrlPosition();
 
 	const [cityName, setCityName] = useState('');
 	const [country, setCountry] = useState('');

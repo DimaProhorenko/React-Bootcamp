@@ -19,10 +19,6 @@ function City() {
 		getCurrentCity(id);
 	}, [id]);
 
-	if (!Object.keys(currentCity).length) {
-		return <h1>Something went wrong</h1>;
-	}
-
 	const { cityName, emoji, date, notes } = currentCity;
 
 	if (isLoading) return <Spinner />;
