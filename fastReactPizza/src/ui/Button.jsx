@@ -6,10 +6,11 @@ function Button({
   type = 'submit',
   to = '',
   variant = 'default',
+  size = 'md',
   onClick,
 }) {
   const baseClasses =
-    'cursor-pointer rounded-full   px-4 py-2 font-semibold uppercase  transition-all  disabled:cursor-not-allowed disabled:opacity-50';
+    'cursor-pointer rounded-full font-semibold uppercase  transition-all  disabled:cursor-not-allowed disabled:opacity-50';
   const variantClasses = {
     default:
       'border border-transparent bg-yellow-500 text-stone-100 hover:border-yellow-500 hover:bg-transparent hover:text-yellow-500 focus:bg-yellow-300 focus:text-stone-800 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-offset-2',
@@ -21,7 +22,12 @@ function Button({
       'bg-red-500 text-stone-100 focus:outline-none focus:ring focus:ring-red-500 focus:ring-offset-2 hover:bg-red-600 transition-all',
   };
 
-  const classes = `${baseClasses} ${variantClasses[variant]}`;
+  const sizes = {
+    sm: 'px-3 py-2 text-xs',
+    md: 'px-4 py-3 text-base',
+  };
+
+  const classes = `${baseClasses} ${sizes[size]} ${variantClasses[variant]}`;
 
   return to ? (
     <Link to={to} className={classes}>

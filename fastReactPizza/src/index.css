@@ -6,12 +6,17 @@
   body {
     @apply bg-stone-200;
     @apply text-stone-700;
+    @apply font-pizza;
   }
 }
 
 @layer components {
   .input {
     @apply w-full cursor-pointer rounded-full border border-stone-300 px-3 py-2 text-sm transition-all focus:outline-none focus:ring focus:ring-yellow-400;
+  }
+
+  .label {
+    @apply mb-1 block text-sm sm:mb-2 sm:text-base;
   }
 
   /* https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje */
