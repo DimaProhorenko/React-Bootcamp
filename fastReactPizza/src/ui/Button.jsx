@@ -6,6 +6,7 @@ function Button({
   type = 'submit',
   to = '',
   variant = 'default',
+  onClick,
 }) {
   const baseClasses =
     'cursor-pointer rounded-full   px-4 py-2 font-semibold uppercase  transition-all  disabled:cursor-not-allowed disabled:opacity-50';
@@ -16,6 +17,8 @@ function Button({
       'border border-yellow-500 hover:bg-yellow-500 hover:text-stone-100',
     secondary:
       'bg-blue-500 text-stone-100 hover:bg-blue-800 transition-colors focus:outline-none focus:ring focus:ring-blue-500 focus:ring-offset-2',
+    danger:
+      'bg-red-500 text-stone-100 focus:outline-none focus:ring focus:ring-red-500 focus:ring-offset-2 hover:bg-red-600 transition-all',
   };
 
   const classes = `${baseClasses} ${variantClasses[variant]}`;
@@ -25,7 +28,12 @@ function Button({
       {children}
     </Link>
   ) : (
-    <button type={type} disabled={disabled} className={classes}>
+    <button
+      type={type}
+      disabled={disabled}
+      className={classes}
+      onClick={onClick}
+    >
       {children}
     </button>
   );
