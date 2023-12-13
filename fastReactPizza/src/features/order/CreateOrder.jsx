@@ -59,7 +59,9 @@ function CreateOrder() {
           <div>
             <input type="tel" name="phone" required className="input" />
             {formErrors?.phone && (
-              <span className="text-xs text-red-500">{formErrors.phone}</span>
+              <span className="mt-2 block rounded-md bg-red-100 p-2 text-xs text-red-700">
+                {formErrors.phone}
+              </span>
             )}
           </div>
         </div>

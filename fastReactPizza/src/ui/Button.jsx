@@ -24,7 +24,7 @@ function Button({
 
   const sizes = {
     sm: 'px-3 py-2 text-xs',
-    md: 'px-4 py-3 text-base',
+    md: 'px-4 py-3 text-sm',
   };
 
   const classes = `${baseClasses} ${sizes[size]} ${variantClasses[variant]}`;
