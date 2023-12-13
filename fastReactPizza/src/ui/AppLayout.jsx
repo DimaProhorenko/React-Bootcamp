@@ -4,19 +4,19 @@ import Header from './Header';
 import Loader from './Loader';
 
 function AppLayout() {
-	const navigation = useNavigation();
-	const isLoading = navigation.state === 'loading';
+  const navigation = useNavigation();
+  const isLoading = navigation.state === 'loading';
 
-	return (
-		<div className="layout">
-			<Header />
-			<main>
-				{isLoading && <Loader />}
+  return (
+    <div className="grid h-screen grid-rows-[auto_1fr_auto]">
+      <Header />
+      <main className="overflow-y-scroll">
+        {isLoading && <Loader />}
 
-				<Outlet />
-			</main>
-			<CartOverview />
-		</div>
-	);
+        <Outlet />
+      </main>
+      <CartOverview />
+    </div>
+  );
 }
 export default AppLayout;
