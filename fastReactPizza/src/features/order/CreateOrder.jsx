@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../ui/Button';
 
@@ -36,6 +36,7 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
+  const username = useSelector((state) => state.user.username);
   const isSubmiting = navigation.state === 'submitting';
 
   const formErrors = useActionData();
@@ -51,7 +52,13 @@ function CreateOrder() {
       <Form method="POST" className="mx-auto max-w-sm space-y-5">
         <div>
           <label className="label">First Name</label>
-          <input type="text" name="customer" required className="input" />
+          <input
+            type="text"
+            name="customer"
+            required
+            className="input"
+            defaultValue={username}
+          />
         </div>
 
         <div>
