@@ -3,6 +3,7 @@ import Button from '../../ui/Button';
 import Link from '../../ui/Link';
 import CartItem from './CartItem';
 import { clearCart } from './cartSlice';
+import EmptyCart from './EmptyCart';
 
 function Cart() {
   const cart = useSelector((state) => state.cart.cart);
@@ -14,14 +15,7 @@ function Cart() {
   };
 
   if (!cart.length) {
-    return (
-      <div className="container py-5">
-        <Link to="/menu">&larr; Back to menu</Link>
-        <h1 className="text-lg font-semibold md:text-xl">
-          Your cart is empty. Start ordering pizzas
-        </h1>
-      </div>
-    );
+    return <EmptyCart />;
   }
 
   return (
